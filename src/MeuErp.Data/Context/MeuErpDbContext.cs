@@ -9,6 +9,15 @@ namespace MeuErp.Data.Context
         public DbSet<GrupoProduto> GruposProdutos => Set<GrupoProduto>();
         public DbSet<Produto> Produtos => Set<Produto>();
         public DbSet<Servico> Servicos => Set<Servico>();
+        public DbSet<MarcaEquipamento> MarcaEquipamento => Set<MarcaEquipamento>();
+        public DbSet<ModeloEquipamento> ModeloEquipamento => Set<ModeloEquipamento>();
+        public DbSet<TipoEquipamento> TipoEquipamento => Set<TipoEquipamento>();
+        public DbSet<Equipamento> Equipamentos => Set<Equipamento>();
+        public DbSet<ItemProdutoOs> ItemProdutoOs => Set<ItemProdutoOs>();
+        public DbSet<ItemServicoOs> ItemServicoOs => Set<ItemServicoOs>();
+        public DbSet<SituacaoOs> SituacaoOs => Set<SituacaoOs>();
+        public DbSet<TipoOs> TipoOs => Set<TipoOs>();
+        public DbSet<Os> Os => Set<Os>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -15,7 +15,7 @@ namespace MeuErp.Data.Mappings
             builder.Property(p => p.MarcaEquipamentoId).HasColumnName("marca_equipamento_id").HasColumnType("int").IsRequired();
             builder.Property(p => p.ModeloEquipamentoId).HasColumnName("modelo_equipamento_id").HasColumnType("int");
             builder.Property(p => p.ClienteId).HasColumnName("cliente_id").HasColumnType("int").IsRequired();
-            builder.Property(p => p.EnderecoId).HasColumnName("endereco_id").HasColumnType("int");
+            builder.Property(p => p.UnidadeClienteId).HasColumnName("unidade_cliente_id").HasColumnType("int");
             builder.Property(p => p.NumeroSerie).HasColumnName("numero_serie").HasColumnType("varchar(50)").IsRequired();
             builder.Property(p => p.NumeroLote).HasColumnName("numero_lote").HasColumnType("varchar(20)");
             builder.Property(p => p.DataFabricacao).HasColumnName("data_fabricacao").HasColumnType("datetime2");
@@ -45,9 +45,9 @@ namespace MeuErp.Data.Mappings
                 .HasForeignKey(p => p.ClienteId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(p => p.Endereco)
+            builder.HasOne(p => p.UnidadeCliente)
                 .WithMany(p => p.Equipamentos)
-                .HasForeignKey(p => p.EnderecoId)
+                .HasForeignKey(p => p.UnidadeClienteId)
                 .OnDelete(DeleteBehavior.NoAction);
 
         }

@@ -17,6 +17,7 @@ namespace MeuErp.Business.Models
         public DateTime DataCadastro { get; set; }
 
         public IList<Endereco> Enderecos { get; set; } = new List<Endereco>();
+        public IList<UnidadeCliente> Unidades { get; set; } = new List<UnidadeCliente>();
         public IList<Equipamento> Equipamentos { get; set; } = new List<Equipamento>();
         public IList<Os> Oss { get; set; } = new List<Os>();
 

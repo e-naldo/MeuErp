@@ -20,7 +20,7 @@ namespace MeuErp.Business.Models
 
         public GrupoProduto? GrupoProduto { get; set; }
 
-        public IList<ItemProdutoOs> Itens { get; set; } = new List<ItemProdutoOs>();
+        public IList<ItemProdutoOs> ItensProdutos { get; set; } = new List<ItemProdutoOs>();
 
     }
 }

@@ -29,7 +29,7 @@ namespace MeuErp.Data.Mappings
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(p => p.Produto)
-                .WithMany(p => p.Itens)
+                .WithMany(p => p.ItensProdutos)
                  .HasForeignKey(p => p.ProdutoId)
                  .OnDelete(DeleteBehavior.NoAction);
         }

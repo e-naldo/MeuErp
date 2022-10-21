@@ -94,11 +94,6 @@ namespace MeuErp.Data.Migrations
                         .HasColumnType("varchar(60)")
                         .HasColumnName("complemento");
 
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("varchar(60)")
-                        .HasColumnName("descricao");
-
                     b.Property<bool>("EnderecoCobranca")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -110,12 +105,6 @@ namespace MeuErp.Data.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnName("endereco_entrega");
-
-                    b.Property<bool>("EnderecoServico")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("endereco_servico");
 
                     b.Property<string>("Logradouro")
                         .IsRequired()
@@ -171,10 +160,6 @@ namespace MeuErp.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("data_fim_garantia");
 
-                    b.Property<int?>("EnderecoId")
-                        .HasColumnType("int")
-                        .HasColumnName("endereco_id");
-
                     b.Property<bool>("Inativo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -206,17 +191,22 @@ namespace MeuErp.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("tipo_equipamento_id");
 
+                    b.Property<int?>("UnidadeClienteId")
+                        .IsRequired()
+                        .HasColumnType("int")
+                        .HasColumnName("unidade_cliente_id");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
-
-                    b.HasIndex("EnderecoId");
 
                     b.HasIndex("MarcaEquipamentoId");
 
                     b.HasIndex("ModeloEquipamentoId");
 
                     b.HasIndex("TipoEquipamentoId");
+
+                    b.HasIndex("UnidadeClienteId");
 
                     b.ToTable("equipamento", (string)null);
                 });
@@ -418,7 +408,7 @@ namespace MeuErp.Data.Migrations
                         .HasColumnName("tipo_os_id");
 
                     b.Property<decimal>("ValorTotal")
-                        .HasColumnType("decimal")
+                        .HasColumnType("decimal(18,6)")
                         .HasColumnName("valor_total");
 
                     b.HasKey("Id");
@@ -569,8 +559,8 @@ namespace MeuErp.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(max)")
+                        .HasColumnName("descricao");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -580,6 +570,87 @@ namespace MeuErp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("tipo_os", (string)null);
+                });
+
+            modelBuilder.Entity("MeuErp.Business.Models.UnidadeCliente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Bairro")
+                        .IsRequired()
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("bairro");
+
+                    b.Property<string>("Celular")
+                        .HasColumnType("varchar(14)")
+                        .HasColumnName("celular");
+
+                    b.Property<bool>("CelularWhatsapp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("celular_whatsapp");
+
+                    b.Property<string>("Cep")
+                        .IsRequired()
+                        .HasColumnType("char(8)")
+                        .HasColumnName("cep");
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int")
+                        .HasColumnName("cliente_id");
+
+                    b.Property<string>("Complemento")
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("complemento");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("Logradouro")
+                        .IsRequired()
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("logradouro");
+
+                    b.Property<string>("Municipio")
+                        .IsRequired()
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("municipio");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("nome");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("numero");
+
+                    b.Property<string>("Responsavel")
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("responsavel");
+
+                    b.Property<string>("Telefone")
+                        .HasColumnType("varchar(14)")
+                        .HasColumnName("telefone");
+
+                    b.Property<string>("Uf")
+                        .IsRequired()
+                        .HasColumnType("char(2)")
+                        .HasColumnName("uf");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.ToTable("unidade_cliente", (string)null);
                 });
 
             modelBuilder.Entity("MeuErp.Business.Models.Endereco", b =>
@@ -601,11 +672,6 @@ namespace MeuErp.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("MeuErp.Business.Models.Endereco", "Endereco")
-                        .WithMany("Equipamentos")
-                        .HasForeignKey("EnderecoId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("MeuErp.Business.Models.MarcaEquipamento", "MarcaEquipamento")
                         .WithMany("Equipamentos")
                         .HasForeignKey("MarcaEquipamentoId")
@@ -624,15 +690,21 @@ namespace MeuErp.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Cliente");
+                    b.HasOne("MeuErp.Business.Models.UnidadeCliente", "UnidadeCliente")
+                        .WithMany("Equipamentos")
+                        .HasForeignKey("UnidadeClienteId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
-                    b.Navigation("Endereco");
+                    b.Navigation("Cliente");
 
                     b.Navigation("MarcaEquipamento");
 
                     b.Navigation("ModeloEquipamento");
 
                     b.Navigation("TipoEquipamento");
+
+                    b.Navigation("UnidadeCliente");
                 });
 
             modelBuilder.Entity("MeuErp.Business.Models.ItemProdutoOs", b =>
@@ -644,7 +716,7 @@ namespace MeuErp.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("MeuErp.Business.Models.Produto", "Produto")
-                        .WithMany("Itens")
+                        .WithMany("ItensProdutos")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -729,6 +801,17 @@ namespace MeuErp.Data.Migrations
                     b.Navigation("GrupoProduto");
                 });
 
+            modelBuilder.Entity("MeuErp.Business.Models.UnidadeCliente", b =>
+                {
+                    b.HasOne("MeuErp.Business.Models.Cliente", "Cliente")
+                        .WithMany("Unidades")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+                });
+
             modelBuilder.Entity("MeuErp.Business.Models.Cliente", b =>
                 {
                     b.Navigation("Enderecos");
@@ -736,11 +819,8 @@ namespace MeuErp.Data.Migrations
                     b.Navigation("Equipamentos");
 
                     b.Navigation("Oss");
-                });
 
-            modelBuilder.Entity("MeuErp.Business.Models.Endereco", b =>
-                {
-                    b.Navigation("Equipamentos");
+                    b.Navigation("Unidades");
                 });
 
             modelBuilder.Entity("MeuErp.Business.Models.Equipamento", b =>
@@ -774,7 +854,7 @@ namespace MeuErp.Data.Migrations
 
             modelBuilder.Entity("MeuErp.Business.Models.Produto", b =>
                 {
-                    b.Navigation("Itens");
+                    b.Navigation("ItensProdutos");
                 });
 
             modelBuilder.Entity("MeuErp.Business.Models.Servico", b =>
@@ -795,6 +875,11 @@ namespace MeuErp.Data.Migrations
             modelBuilder.Entity("MeuErp.Business.Models.TipoOs", b =>
                 {
                     b.Navigation("Oss");
+                });
+
+            modelBuilder.Entity("MeuErp.Business.Models.UnidadeCliente", b =>
+                {
+                    b.Navigation("Equipamentos");
                 });
 #pragma warning restore 612, 618
         }
